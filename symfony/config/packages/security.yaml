@@ -1,0 +1,47 @@
+# config/packages/security.yaml
+security:
+    # Конфигурация провайдера пользователей
+    providers:
+        # Используется для загрузки пользователя из сессии и других функций (например, switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            entry_point: form_login
+            lazy: true
+            provider: app_user_provider
+            logout:
+                path: app_logout
+
+            form_login:
+            # "app_login" - это имя маршрута, созданного ранее
+            # Опции login_path и check_path больше не используются
+            # CSRF защита включена по умолчанию, enable_csrf более не нужен
+            json_login:
+                # api_login - это маршрут, который мы создадим ниже
+                check_path: api_login
+            x509:
+                provider: app_user_provider # Исправлено на app_user_provider
+            remote_user:
+                provider: app_user_provider # Исправлено на app_user_provider
+            custom_authenticator: App\Security\LoginFormAuthenticator
+    # Конфигурация контроля доступа
+    access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
+    # Опции безопасности
+    access_decision_manager:
+        strategy: unanimous
+        allow_if_all_abstain: false
+        allow_if_equal_granted_denied: true
+    access_denied_url: null
+    enable_authenticator_manager: true
+    erase_credentials: true
+    hide_user_not_found: true
+    role_hierarchy: null
+    session_fixation_strategy: none

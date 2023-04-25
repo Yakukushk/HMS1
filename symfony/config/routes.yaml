@@ -1,0 +1,12 @@
+# config/routes.yaml
+# Определение ресурса для контроллеров
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# Определение маршрута для выхода из системы (logout)
+app_logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout
